@@ -1,0 +1,26 @@
+---
+title: "Untitled"
+author: "Miguel Diaz"
+date: "3 May 2016"
+output: html_document
+---
+```{r}
+setwd("/Users/khispa/Data Sciense Specialization/Reproducible_research")
+activity <- read.csv("activity.csv")
+require(data.table)
+activity <- data.table(activity)
+activity$steps[which(is.na(activity$steps))] <- 0
+setkey(activity, date)
+act_group <- activity[,sum(.SD$steps, na.rm = TRUE), by=date]
+hist(act_group$V1)
+mean(act_group$V1)
+median(act_group$V1)
+
+act_average <- activity[,mean(.SD$steps, na.rm = TRUE), by=date]
+plot(act_average$date,act_average$V1)
+
+max <- activity[which(activity$steps==max(activity$steps)),]
+
+```
+
+ 
