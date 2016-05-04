@@ -61,5 +61,10 @@ The new mean of number of steps per day is `r mean(act_group2$V1)` and the media
 activity_no_na$date <- as.Date(activity_no_na$date)
 activity_no_na$week <- as.POSIXlt(activity_no_na$date)$wday
 activity_no_na$weekd <- ifelse(activity_no_na$week %in% c(0,6), 0,1)
+activity_no_na <- as.data.frame(activity_no_na)
+activity_no_na <- activity_no_na[ , c(1,2,3,5)]
+activity_no_na$weekd <- as.factor(activity_no_na$weekd)
+require(lattice) 
+xyplot(steps~interval|weekd,data=activity_no_na,type="o")
 ```
 
