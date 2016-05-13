@@ -35,6 +35,8 @@ head(Raw_data)
 In this part we will use the data.table package features to organize the events from the most dangerous to the least dangerous using the 3 main ways to calculate it: fatalities, injuries and property damage.
 
 ```{r, echo=TRUE}
+require(data.table)
+Raw_data <- data.table(Raw_data)
 fatalities <- Raw_data[, list(total_fat = sum(.SD$FATALITIES),
                          total_inj = sum(.SD$INJURIES),
                          total_cost = sum(.SD$PROPDMG))
@@ -47,5 +49,17 @@ top_cost <- fatalities[order(total_cost,decreasing=TRUE),][1:10]
 ## Results
 
 ```{r, echo=TRUE}
+fatal <- barplot(top_fatal$total_fat, names.arg = top_fatal$EVTYPE,
+        cex.names = 0.5, main = "Top natural disasters by fatalities", ylim = c(0,6100) )
+text(x = fatal, y = top_fatal$total_fat, label = top_fatal$total_fat, pos = 3, cex = 0.8, col = "red",las=3)
+
+injur <- barplot(top_injur$total_inj, names.arg = top_injur$EVTYPE,
+        cex.names = 0.5, main = "Top natural disasters by injuries", ylim = c(0,100000))
+text(x = injur, y = top_injur$total_inj, label = top_injur$total_inj, pos = 3, cex = 0.8, col = "red")
+
+damage <- barplot(top_cost$total_cost, names.arg = top_cost$EVTYPE,
+        cex.names = 0.5, main = "Top natural disasters by damage destruction", ylim = c(0,4000000))
+text(x = damage, y = top_cost$total_cost, label = paste(round(top_cost$total_cost/1000000, digits = 1),"M$"),
+     pos = 3, cex = 0.8, col = "red")
 
 ```
