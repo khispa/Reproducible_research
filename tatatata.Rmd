@@ -1,0 +1,51 @@
+---
+title: "Study of natural distasters dangerousness"
+author: "Miguel Diaz"
+date: "13 de mayo de 2016"
+output: html_document
+---
+
+## Introduction
+
+This is the story of a young man who wanted to face the most dangerous force of nature. However, since he didn't really know which one was it, he decided to unleash the power of data to identify it. What happened next... well, that's another story.
+
+## Sinopsis
+
+This analysis consists on the preprocessing of data, downloading from orginal file and load into R. Then the calculations for the dangerousnes of each natural event. And finally the show of the results, using graphs and tables to display the relevant information. Every line of code will be included in the document, so it should be fully reproducible.
+
+
+## Section 1: Data processing
+
+First thing we download the file with the Storm data from the internet and load it in RStudio, creating a dataframe called Raw_data.
+
+```{r, cache=TRUE, echo = TRUE}
+
+require(data.table)
+# download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2","raw_data.csv.bz2")
+Raw_data <- read.csv("raw_data.csv.bz2")
+Raw_data <- data.table(Raw_data)
+
+dim(Raw_data)
+head(Raw_data)
+
+```
+
+## Analysis
+
+In this part we will use the data.table package features to organize the events from the most dangerous to the least dangerous using the 3 main ways to calculate it: fatalities, injuries and property damage.
+
+```{r, echo=TRUE}
+fatalities <- Raw_data[, list(total_fat = sum(.SD$FATALITIES),
+                         total_inj = sum(.SD$INJURIES),
+                         total_cost = sum(.SD$PROPDMG))
+                       , by = .(EVTYPE)]
+top_fatal <- fatalities[order(total_fat,decreasing=TRUE),][1:10]
+top_injur <- fatalities[order(total_inj,decreasing=TRUE),][1:10]
+top_cost <- fatalities[order(total_cost,decreasing=TRUE),][1:10]
+```
+
+## Results
+
+```{r, echo=TRUE}
+
+```
